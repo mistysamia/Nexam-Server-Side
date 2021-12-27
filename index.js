@@ -29,7 +29,7 @@ async function run() {
         const orderRequest = database.collection('statdata');
 
         //GET products API
-        app.get('/library', async (req, res) => {
+        app.post('/library', async (req, res) => {
             const cursor = libraryCollection.find({});
             const page = req.query.page;
             const size = parseInt(req.query.size);
