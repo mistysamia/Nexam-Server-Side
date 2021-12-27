@@ -233,8 +233,8 @@ app.get('/lib', (req, res) => {
     const page = req.query.page;
     const size = parseInt(req.query.size);
     let products;
+    res.send(cursor);
 
-    console.log(cursor);
 });
 
 app.get('/', (req, res) => {
