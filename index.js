@@ -16,23 +16,26 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function run() {
+
     try {
         await client.connect();
-        const database = client.db('HanDcraft');
-        const productCollection = database.collection('products');
+        const database = client.db('nexam');
+       /* const productCollection = database.collection('products');
         const reviewCollection = database.collection('Review');
         const orderCollection = database.collection('Order');
         const orderRequest = database.collection('OrderRequest');
-        const adminCollection = database.collection('Admin');
+        const adminCollection = database.collection('Admin');*/
+        const libraryCollection = database.collection('library');
+        const orderRequest = database.collection('statdata');
 
         //GET products API
-        app.get('/products', async (req, res) => {
-            const cursor = productCollection.find({});
+        app.get('/library', async (req, res) => {
+            const cursor = libraryCollection.find({});
             const page = req.query.page;
             const size = parseInt(req.query.size);
             let products;
-            const count = await cursor.count();
 
+            const count = await cursor.count();
             if (page) {
                 products = await cursor.skip(page * size).limit(size).toArray();
             }
@@ -228,7 +231,7 @@ app.get('/', (req, res) => {
     res.send('HanDCraft ');
 });
 app.get('/handCraft', (req, res) => {
-    res.send('hanDCraft start is running by MISTY');
+    res.send('xx start is running by MISTY');
 });
 
 app.listen(port, () => {
