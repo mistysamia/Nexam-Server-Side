@@ -35,19 +35,18 @@ async function run() {
             const size = parseInt(req.query.size);
             let products;
 
-            console.log(cursor);
-            // const count = await cursor.count();
-            // if (page) {
-            //     products = await cursor.skip(page * size).limit(size).toArray();
-            // }
-            // else {
-            //     products = await cursor.toArray();
-            // }
+            const count = await cursor.count();
+            if (page) {
+                products = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                products = await cursor.toArray();
+            }
 
-            // res.send({
-            //     count,
-            //     products
-            // });
+            res.send({
+                count,
+                products
+            });
         });
 
         //GET review API
@@ -228,20 +227,13 @@ async function run() {
 
 run().catch(console.dir);
 
-app.get('/lib', (req, res) => {
-    const cursor = libraryCollection.find({});
-    const page = req.query.page;
-    const size = parseInt(req.query.size);
-    let products;
-    res.send(cursor);
 
-});
 
 app.get('/', (req, res) => {
     res.send('HanDCraft ');
 });
 app.get('/handCraft', (req, res) => {
-    res.send('xx start is running by MISTY');
+    res.send('Nice start is running by MISTY');
 });
 
 app.listen(port, () => {
