@@ -230,7 +230,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('HanDCraft n ');
+    res.send('noice ');
 });
 app.get('/handCraft', (req, res) => {
     res.send('xx start is running by MISTY');
