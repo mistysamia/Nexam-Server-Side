@@ -26,7 +26,7 @@ async function run() {
         const orderRequest = database.collection('OrderRequest');
         const adminCollection = database.collection('Admin');*/
         const libraryCollection = database.collection('library');
-        const orderRequest = database.collection('statdata');
+        const statdataCollection = database.collection('statdata');
 
         //GET products API
         app.get('/library', async (req, res) => {
@@ -50,8 +50,8 @@ async function run() {
         });
 
         //GET review API
-        app.get('/review', async (req, res) => {
-            const cursor = reviewCollection.find({});
+        app.get('/statdata', async (req, res) => {
+            const cursor = statdataCollection.find({});
             const page = req.query.page;
             const size = parseInt(req.query.size);
             let review;
