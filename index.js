@@ -27,6 +27,7 @@ async function run() {
         const adminCollection = database.collection('Admin');*/
         const libraryCollection = database.collection('library');
         const statdataCollection = database.collection('statdata');
+        const profileCollection = database.collection('profile');
 
         //GET products API
         app.get('/library', async (req, res) => {
@@ -48,6 +49,28 @@ async function run() {
                 products
             });
         });
+
+        //GET profile API
+        app.get('/profile', async (req, res) => {
+            const cursor = profileCollection.find({});
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let products;
+
+            const count = await cursor.count();
+            if (page) {
+                products = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                products = await cursor.toArray();
+            }
+
+            res.send({
+                count,
+                profile
+            });
+        });
+
 
         //GET review API
         app.get('/statdata', async (req, res) => {
