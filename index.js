@@ -67,7 +67,7 @@ async function run() {
 
             res.send({
                 count,
-                profile
+                products
             });
         });
 
