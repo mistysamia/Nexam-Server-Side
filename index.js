@@ -20,14 +20,13 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('nexam');
-       /* const productCollection = database.collection('products');
-        const reviewCollection = database.collection('Review');
-        const orderCollection = database.collection('Order');
-        const orderRequest = database.collection('OrderRequest');
-        const adminCollection = database.collection('Admin');*/
+
         const libraryCollection = database.collection('library');
         const statdataCollection = database.collection('statdata');
         const profileCollection = database.collection('profile');
+        const examstatCollection = database.collection('examstat');
+
+        
 
         //GET products API
         app.get('/library', async (req, res) => {
@@ -71,6 +70,26 @@ async function run() {
             });
         });
 
+        //GET examstat API
+        app.get('/examstat', async (req, res) => {
+            const cursor = examstatCollection.find({});
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let products;
+
+            const count = await cursor.count();
+            if (page) {
+                products = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                products = await cursor.toArray();
+            }
+
+            res.send({
+                count,
+                products
+            });
+        });
 
         //GET review API
         app.get('/statdata', async (req, res) => {
