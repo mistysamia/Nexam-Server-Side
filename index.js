@@ -25,8 +25,11 @@ async function run() {
         const statdataCollection = database.collection('statdata');
         const profileCollection = database.collection('profile');
         const examstatCollection = database.collection('examstat');
+        const unverifiedaffirliateCollection = database.collection('unverifiedaffirliate');
+        const verifiedaffirliateCollection = database.collection('verifiedaffirliate');
 
-        
+
+
 
         //GET products API
         app.get('/library', async (req, res) => {
@@ -154,28 +157,70 @@ async function run() {
             });
         });
 
+        //GET review API
+        app.get('/verified', async (req, res) => {
+            const cursor = verifiedaffirliateCollection.find({});
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let review;
+            const count = await cursor.count();
 
-         //GET Admin API
-      
-            app.get('/admindisplay', async (req, res) => {
-                const cursor = adminCollection.find({});
-                const page = req.query.page;
-                const size = parseInt(req.query.size);
-                let admins;
-                const count = await cursor.count();
+            if (page) {
+                review = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                review = await cursor.toArray();
+            }
 
-                if (page) {
-                    admins = await cursor.skip(page * size).limit(size).toArray();
-                }
-                else {
-                    admins = await cursor.toArray();
-                }
-
-                res.send({
-                    count,
-                    admins
-                });
+            res.send({
+                count,
+                review
             });
+        });
+
+           //GET review API
+           app.get('/unverified', async (req, res) => {
+            const cursor = unverifiedaffirliateCollection.find({});
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let review;
+            const count = await cursor.count();
+
+            if (page) {
+                review = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                review = await cursor.toArray();
+            }
+
+            res.send({
+                count,
+                review
+            });
+        });
+
+
+        //GET Admin API
+
+        app.get('/admindisplay', async (req, res) => {
+            const cursor = adminCollection.find({});
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let admins;
+            const count = await cursor.count();
+
+            if (page) {
+                admins = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                admins = await cursor.toArray();
+            }
+
+            res.send({
+                count,
+                admins
+            });
+        });
 
         // Add review API
         app.post('/addnewreview', async (req, res) => {
@@ -185,7 +230,7 @@ async function run() {
         })
 
         // Add Admin API
-     
+
         app.post('/addnewadmin', async (req, res) => {
             const order = req.body;
             const result = await adminCollection.insertOne(order);
@@ -216,8 +261,8 @@ async function run() {
             res.json(result);
         })
 
-         // Add Delete Admin  API
-         app.post('/deleteadmin', async (req, res) => {
+        // Add Delete Admin  API
+        app.post('/deleteadmin', async (req, res) => {
             const order = req.body;
             const result = await adminCollection.deleteOne({ "adminId": order.adminId });
             res.json(result);
